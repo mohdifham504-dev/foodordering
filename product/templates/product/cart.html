@@ -1,0 +1,23 @@
+<!-- templates/product/cart.html -->
+{% extends "base.html" %}
+{% block content %}
+<h1>Your Cart</h1>
+{% if items %}
+  <table border="1" cellpadding="6" cellspacing="0">
+    <tr><th>Item</th><th>Qty</th><th>Price</th><th>Line</th><th>Action</th></tr>
+    {% for it in items %}
+      <tr>
+        <td>{{ it.name }}</td>
+        <td>{{ it.qty }}</td>
+        <td>{{ it.price }}</td>
+        <td>{{ it.line_total }}</td>
+        <td><a href="{% url 'product:remove_from_cart' it.uid %}">Remove</a></td>
+      </tr>
+    {% endfor %}
+    <tr><td colspan="3"><strong>Total</strong></td><td colspan="2"><strong>{{ total }}</strong></td></tr>
+  </table>
+{% else %}
+  <p>Your cart is empty.</p>
+{% endif %}
+<p><a href="{% url 'product:product_list' %}">Continue shopping</a></p>
+{% endblock %}

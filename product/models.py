@@ -3,12 +3,13 @@ import uuid
 
 # Create your models here.
 class Basemodels(models.Model):
-    uid  = models.UUIDField(default= uuid.uuid4, editable= False, primary_key= True)
-    created_at = models.DateField(auto_created=True)
-    updated_at = models.DateField(auto_created= True)
-
-    class Meta:# iske through humari ye models ki class  class kintaraha treats hogi na ki models ki  
-        abstract = True 
+    uid = models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True)
+    # use DateTimeField with auto timestamps
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        abstract = True
 
       
 class Product(Basemodels):
@@ -17,7 +18,11 @@ class Product(Basemodels):
     product_description = models.TextField()
     product_price  = models.IntegerField(default= 0 )
     product_demo_price  = models.IntegerField(default= 0)
+    def __str__(self) -> str:
+         return self.Product_name
+
   
+
    
    
                                          
@@ -26,10 +31,18 @@ class Product(Basemodels):
 class Productmetainformation(Basemodels):
     product = models.OneToOneField(Product , on_delete= models.CASCADE)
     product_quantity = models.CharField(null= True, blank=True)
-    product_measuring = models.CharField(max_length= 100, choices=(("KG","KG"),("ML", "ML"), ("L","L"),(None,None)))
+    MEASURING_CHOICES = (
+        ("KG", "KG"),
+        ("ML", "ML"),
+        ("L", "L"),
+    )
+    product_measuring = models.CharField(max_length= 10, choices=MEASURING_CHOICES, null=True, blank=True)
     is_restricted = models.BooleanField(default=False)
-    restricted_quantity = models.IntegerField() 
-     
+    restricted_quantity = models.IntegerField(default=0)
+   
+
+
+    
      
 
 class ProductImage(Basemodels):

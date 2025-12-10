@@ -1,0 +1,22 @@
+<!-- templates/product/product_list.html -->
+{% extends "base.html" %}
+{% block content %}
+<h1>Products</h1>
+<div style="display:flex; flex-wrap:wrap; gap:20px;">
+  {% for p in products %}
+    <div style="border:1px solid #ddd; padding:10px; width:240px;">
+      {% if p.image.first %}
+        <img src="{{ p.image.first.product_image.url }}" style="width:100%; height:150px; object-fit:cover;" alt="{{ p.Product_name }}">
+      {% endif %}
+      <h3><a href="{% url 'product:product_detail' slug=p.product_slug %}">{{ p.Product_name }}</a></h3>
+      <p>Price: {{ p.product_price }}</p>
+      <form action="{% url 'product:add_to_cart' slug=p.product_slug %}" method="post">
+        {% csrf_token %}
+        <button type="submit">Add to cart</button>
+      </form>
+    </div>
+  {% empty %}
+    <p>No products yet.</p>
+  {% endfor %}
+</div>
+{% endblock %}

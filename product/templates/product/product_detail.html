@@ -1,0 +1,31 @@
+<!-- templates/product/product_detail.html -->
+{% extends "base.html" %}
+{% block content %}
+<h1>{{ product.Product_name }}</h1>
+
+<div style="display:flex; gap:20px;">
+  <div style="flex:0 0 350px;">
+    {% for img in images %}
+      <img src="{{ img.product_image.url }}" style="width:100%; margin-bottom:10px; object-fit:cover;" alt="image">
+    {% empty %}
+      <p>(no images)</p>
+    {% endfor %}
+  </div>
+  <div>
+    <p>{{ product.product_description|linebreaks }}</p>
+    <p><strong>Price:</strong> {{ product.product_price }}</p>
+    {% if meta %}
+      <p><strong>Quantity:</strong> {{ meta.product_quantity }}</p>
+      <p><strong>Measuring:</strong> {{ meta.product_measuring }}</p>
+      {% if meta.is_restricted %}
+        <p style="color:red;">Restricted: max {{ meta.restricted_quantity }}</p>
+      {% endif %}
+    {% endif %}
+    <form action="{% url 'product:add_to_cart' slug=product.product_slug %}" method="post">
+      {% csrf_token %}
+      <button type="submit">Add to Cart</button>
+    </form>
+  </div>
+</div>
+<a href="{% url 'product:product_list' %}">Back to list</a>
+{% endblock %}
